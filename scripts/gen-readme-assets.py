@@ -3,7 +3,7 @@
 import os, sys, json, requests, concurrent.futures as cf
 from pathlib import Path
 
-OUT = Path("/home/moe/gh/hermes-access/docs/assets")
+OUT = Path(__file__).resolve().parent.parent / "docs" / "assets"
 OUT.mkdir(parents=True, exist_ok=True)
 ENDPOINT = "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions"
 

@@ -4,7 +4,7 @@
 set -euo pipefail
 VENV_PY="$HOME/.hermes/hermes-agent/venv/bin/python"
 BRIDGE="$HOME/projects/hermes-access/bridge/server.py"
-BRIDGE_URL="http://127.0.0.1:8661"
+BRIDGE_URL="${BRIDGE_URL:-http://127.0.0.1:8661}"
 
 # ensure bridge is up
 if ! curl -s -m 3 "$BRIDGE_URL/health" >/dev/null 2>&1; then

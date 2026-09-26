@@ -24,7 +24,7 @@ print("key rotated:", new_key[:8] + "..." + new_key[-4:])
 r = subprocess.run(
     ["systemd-run", "--user", "--on-active=5", "--timer-property=AccuracySec=1",
      "--unit=gw-key-reload",
-     "/home/moe/.hermes/hermes-agent/venv/bin/python",
-     "/home/moe/projects/hermes-access/scripts/restart_gateway.py"],
+     "os.path.expanduser("~/.hermes/hermes-agent/venv/bin/python")",
+     "os.path.join(os.path.dirname(__file__), "restart_gateway.py")"],
     capture_output=True, text=True, timeout=15)
 print("schedule rc:", r.returncode, r.stdout.strip(), r.stderr.strip())
