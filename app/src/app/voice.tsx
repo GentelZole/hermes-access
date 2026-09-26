@@ -55,6 +55,23 @@ function originOf(baseUrl: string): string {
   return (baseUrl || '').replace(/(\/\/[^/]+).*$/, '$1').replace(/\/+$/, '');
 }
 
+/**
+ * Voice relay origins, in attempt order. The relay is mounted on the pairing
+ * bridge (scheme + host of the configured bridge), while day-to-day chat
+ * traffic uses the agent origin — for most installs these are identical.
+ */
+function voiceOrigins(): string[] {
+  const { baseUrl } = useConnectionStore.getState();
+  const bridge = useConnectionStore.getState().bridgeUrl || '';
+  const out: string[] = [];
+  const push = (o: string) => {
+    if (o && !out.includes(o)) out.push(o);
+  };
+  push(originOf(bridge));
+  push(originOf(baseUrl));
+  return out.length ? out : [originOf(baseUrl)];
+}
+
 /** Keep the TTS payload inside the server's 1200-char limit. */
 function clipForTts(raw: string): string {
   const text = (raw || '').trim();
@@ -67,19 +84,34 @@ async function transcribe(uri: string): Promise<string> {
   const token = await getToken();
   if (!token) throw new VoiceRequestError('auth');
   const ext = /\.\w{2,4}$/.exec(uri)?.[0] ?? '.m4a';
+  // RN FormData needs a file:// scheme; expo-audio may hand back a bare path.
+  const fileUri = uri.startsWith('file:') || uri.startsWith('content:') || uri.startsWith('http')
+    ? uri
+    : 'file://' + uri;
   const form = new FormData();
   // RN FormData takes a {uri,name,type} file object; TS only types Blob.
   form.append('audio', {
-    uri,
+    uri: fileUri,
     name: 'voice' + ext,
     type: ext === '.wav' ? 'audio/wav' : 'audio/m4a',
   } as unknown as Blob);
   // NOTE: never set Content-Type here — fetch adds the multipart boundary.
-  const res = await fetch(originOf(useConnectionStore.getState().baseUrl) + '/voice/transcribe', {
-    method: 'POST',
-    headers: { Authorization: 'Bearer ' + token },
-    body: form,
-  });
+  // Try the bridge origin first (where the relay is mounted), then the agent.
+  let res: Response | null = null;
+  for (const origin of voiceOrigins()) {
+    try {
+      res = await fetch(origin + '/voice/transcribe', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + token },
+        body: form,
+      });
+    } catch {
+      continue; // network failure on this origin — try the next
+    }
+    if (res.status === 404) continue; // relay not mounted here
+    break;
+  }
+  if (!res) throw new VoiceRequestError('net');
   if (res.status === 401) throw new VoiceRequestError('auth');
   if (!res.ok) throw new VoiceRequestError('net');
   const json = (await res.json()) as { text?: string };
@@ -90,11 +122,21 @@ async function transcribe(uri: string): Promise<string> {
 async function requestSpeech(text: string): Promise<string> {
   const token = await getToken();
   if (!token) throw new VoiceRequestError('auth');
-  const res = await fetch(originOf(useConnectionStore.getState().baseUrl) + '/voice/speak', {
-    method: 'POST',
-    headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text }),
-  });
+  let res: Response | null = null;
+  for (const origin of voiceOrigins()) {
+    try {
+      res = await fetch(origin + '/voice/speak', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      });
+    } catch {
+      continue;
+    }
+    if (res.status === 404) continue;
+    break;
+  }
+  if (!res) throw new VoiceRequestError('net');
   if (res.status === 401) throw new VoiceRequestError('auth');
   if (!res.ok) throw new VoiceRequestError('net');
   const json = (await res.json()) as { audio?: string; format?: string };
@@ -359,7 +401,8 @@ export default function VoiceScreen() {
     }
     if (current === 'speaking') {
       turnRef.current += 1; // cancel any pending TTS continuation
-      toIdle();
+      stopPlayback();
+      void startRecording(); // barge-in: the tap that interrupts also starts the new turn
       return;
     }
     // uploading / thinking are not interruptible — ignore the tap.

@@ -85,11 +85,13 @@ export async function getToken(): Promise<string | null> {
 interface ConnectionState {
   /** Non-secret part of the connection */
   baseUrl: string;
+  /** Pairing bridge origin used for the voice relay; '' for manual connections */
+  bridgeUrl: string;
   label: string;
   connected: boolean;
   checking: boolean;
   /** Set the full connection (token goes straight to SecureStore) */
-  configure: (conn: HermesConnection) => Promise<void>;
+  configure: (conn: HermesConnection & { bridgeUrl?: string }) => Promise<void>;
   /** Load token from SecureStore and build a client */
   getClient: () => Promise<HermesClient | null>;
   /** Probe /health and update `connected` */
@@ -105,6 +107,7 @@ const DEFAULT_BASE_URL = '';
 
 export const useConnectionStore = create<ConnectionState>()((set, get) => ({
   baseUrl: DEFAULT_BASE_URL,
+  bridgeUrl: '',
   label: '',
   connected: false,
   checking: false,
@@ -116,8 +119,9 @@ export const useConnectionStore = create<ConnectionState>()((set, get) => ({
       );
     }
     await writeToken(conn.token);
+    set({ bridgeUrl: conn.bridgeUrl || '' });
     set({ baseUrl: conn.baseUrl, label: conn.label });
-    AsyncStorage.setItem(META_KEY, JSON.stringify({ baseUrl: conn.baseUrl, label: conn.label })).catch(() => {});
+    AsyncStorage.setItem(META_KEY, JSON.stringify({ baseUrl: conn.baseUrl, label: conn.label, bridgeUrl: conn.bridgeUrl || '' })).catch(() => {});
   },
 
   getClient: async () => {
@@ -152,6 +156,7 @@ export async function initConnection(): Promise<void> {
         useConnectionStore.setState({
           baseUrl: meta.baseUrl,
           label: typeof meta.label === 'string' ? meta.label : '',
+          bridgeUrl: typeof meta.bridgeUrl === 'string' ? meta.bridgeUrl : '',
         });
       }
     }

@@ -2,12 +2,11 @@
 hermes-access-bridge — minimal pairing service (Phase 3).
 
 Security model:
-  - Binds loopback by default. Set BRIDGE_HOST to a Tailscale address
-    or front it with a TLS reverse proxy for remote pairing.
+  - Binds ONLY to the Tailscale interface (never public).
   - One-time pairing codes: 256-bit, 10-minute TTL, single use.
   - Rate-limited redemption (5/min per IP), fail-closed on any error.
   - Codes map to the gateway API key, which is handed over exactly once,
-    over the channel you front it with (TLS recommended). Revocation = rotate key.
+    over the already-encrypted Tailscale channel. Revocation = rotate key.
   - No secrets in logs.
 
 Endpoints:
@@ -64,6 +63,17 @@ def _rate_limited(ip: str) -> bool:
     window.append(now)
     _attempts[ip] = window
     return len(window) > MAX_REDEEM_PER_MIN
+
+
+def _voice_rate_limited(ip: str) -> bool:
+    """Voice turns are normal traffic: one transcribe + one speak per turn,
+    so a conversation can legitimately hit 10-20/min. Separate, larger bucket."""
+    now = time.time()
+    key = "voice:" + ip
+    window = [t for t in _attempts.get(key, []) if now - t < 60]
+    window.append(now)
+    _attempts[key] = window
+    return len(window) > 60
 
 
 @app.get("/health")
@@ -154,7 +164,7 @@ def _valid_token(request: Request) -> bool:
 async def voice_transcribe(request: Request):
     if not _valid_token(request):
         raise HTTPException(status_code=401, detail="unauthorized")
-    if _rate_limited(request.headers.get("x-forwarded-for", "").split(",")[0].strip() or "voice"):
+    if _voice_rate_limited(request.headers.get("x-forwarded-for", "").split(",")[0].strip() or "voice"):
         raise HTTPException(status_code=429, detail="too many attempts")
     try:
         form = await request.form()
@@ -201,7 +211,7 @@ async def voice_transcribe(request: Request):
 async def voice_speak(request: Request):
     if not _valid_token(request):
         raise HTTPException(status_code=401, detail="unauthorized")
-    if _rate_limited(request.headers.get("x-forwarded-for", "").split(",")[0].strip() or "voice"):
+    if _voice_rate_limited(request.headers.get("x-forwarded-for", "").split(",")[0].strip() or "voice"):
         raise HTTPException(status_code=429, detail="too many attempts")
     try:
         body = await request.json()

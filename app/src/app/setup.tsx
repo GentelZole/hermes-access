@@ -29,8 +29,6 @@ import { useTheme } from '@/theme/store';
 
 // Default bridge discovery — users of other deployments change this via
 // the field below or their agent's pairing skill.
-/** Deployer-configurable pairing bridge (see .env.example). Empty by
- *  default: the user pastes their bridge URL or pairs via their agent. */
 const DEFAULT_BRIDGE = (process.env.EXPO_PUBLIC_DEFAULT_BRIDGE ?? '').trim();
 
 export default function SetupScreen() {
@@ -56,11 +54,7 @@ export default function SetupScreen() {
     setOk(false);
     setMessage(null);
     try {
-      const bridge = (bridgeUrl.trim().replace(/\/$/, '') || DEFAULT_BRIDGE).trim();
-      if (!bridge) {
-        setMessage(tr('setupErrBridge') + ' — no bridge URL configured');
-        return;
-      }
+      const bridge = bridgeUrl.trim().replace(/\/$/, '') || DEFAULT_BRIDGE;
       const res = await fetch(bridge + '/api/pair/redeem', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -78,7 +72,7 @@ export default function SetupScreen() {
         );
         return;
       }
-      await configure({ baseUrl: data.baseUrl, token: data.token, label: data.label });
+      await configure({ baseUrl: data.baseUrl, token: data.token, label: data.label, bridgeUrl: bridge });
       const healthy = await checkHealth();
       setOk(true);
       setMessage(healthy ? tr('setupOk') : tr('setupWarn'));

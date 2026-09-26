@@ -49,6 +49,17 @@ export default function SettingsScreen() {
             />
             <Divider c={t.border} />
             <Row
+              onPress={() => router.push('/voice' as never)}
+              icon="mic"
+              accent={t.accent}
+              title={tr('voiceRowTitle')}
+              subtitle={tr('voiceRowSub')}
+              text={t.text}
+              sub={t.textSecondary}
+              body={t.fontBody}
+            />
+            <Divider c={t.border} />
+            <Row
               onPress={() => checkHealth()}
               icon={connected ? 'checkmark-circle' : 'cloud-offline'}
               accent={connected ? t.success : t.danger}
