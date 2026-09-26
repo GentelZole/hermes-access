@@ -84,7 +84,6 @@ The bridge reads `API_SERVER_KEY` from `~/.hermes/.env`. Never put a real key in
 * **After any `prebuild`, re-apply release signing:**
 
   ```bash
-  python scripts/apply_signing.py    # idempotent; prints "already patched" if not needed
   ```
 
   It reads `.secrets/signing.properties` (never committed) and re-wires the release `signingConfig`. If you skip it, your "release" APK is signed with the debug key.

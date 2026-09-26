@@ -172,7 +172,6 @@ Security was the first design constraint, not a later hardening pass.
 * **Pairing codes are single use and short lived.** 256-bit random, 10-minute TTL, marked used *before* anything is handed over, redemption rate-limited (5/min/IP) and fail-closed on any error.
 * **The bridge hands over the gateway key exactly once, already inside an encrypted channel.** There is no durable pairing secret sitting on the phone.
 * **Revocation is a key rotation.** The bridge hands the same `API_SERVER_KEY` to every paired device, so removing a device means rotating that key on the gateway. See [SECURITY.md](SECURITY.md) — this is documented as a known, accepted property, not a vulnerability.
-* **Release signing credentials live outside the repo.** `scripts/apply_signing.py` restores release signing from `.secrets/signing.properties`, which is gitignored.
 
 Full policy, threat model, and disclosure channel: [SECURITY.md](SECURITY.md).
 

@@ -77,7 +77,7 @@ Do not include live credentials, and do not test against infrastructure you do n
 
 5. **Device backup.** The app persists no secret in a backed-up location by design (the token lives in Keystore, never `AsyncStorage`), so a device backup does not carry the gateway key.
 
-6. **Release integrity.** Release signing credentials live outside the repo, in `.secrets/signing.properties`, which is gitignored; `scripts/apply_signing.py` re-applies them after any `prebuild`. CI scans tracked files for committed secrets and fails on a hit. There is zero telemetry and no analytics, crash-reporting, or advertising SDK in the dependency set.
+6. **Release integrity.** Release signing credentials live outside the repo, in `.secrets/signing.properties`, which is gitignored; the release build HARD-FAILS (GradleException) when it is missing — a debug-signed release can never be produced by accident. CI scans tracked files for committed secrets and fails on a hit. There is zero telemetry and no analytics, crash-reporting, or advertising SDK in the dependency set.
 
 ---
 
