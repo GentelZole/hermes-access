@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hermes Access — Design Identity Directions · HAMAL KSA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Tajawal:wght@400;500;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Hallmark · macrostructure: triptych-gallery · tone: gallery-wall · anchor hue: 82 (gold) */
+:root{
+  --wall:#161310; --wall-2:#1d1915; --wall-line:#2c2620;
+  --chalk:#efe9dd; --chalk-dim:#a99f8e;
+  --gold:#d4af37;
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--wall);
+  background-image:radial-gradient(1200px 500px at 50% -10%, #241e17 0%, transparent 70%);
+  color:var(--chalk);
+  font-family:'Space Grotesk',sans-serif;
+  min-height:100vh; padding:48px 24px 80px;
+}
+.wall-head{max-width:1440px;margin:0 auto 44px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}
+.wall-head .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.wall-head h1{font-size:clamp(28px,4vw,44px);font-weight:600;letter-spacing:-.02em;margin-top:10px}
+.wall-head h1 em{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold)}
+.wall-head .meta{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--chalk-dim);text-align:right;line-height:1.9}
+.gallery{max-width:1440px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:56px}
+@media(max-width:1100px){.gallery{grid-template-columns:1fr;max-width:430px}}
+.piece{display:flex;flex-direction:column;align-items:center;gap:22px;animation:rise .7s var(--ease-out) both}
+.piece:nth-child(2){animation-delay:.12s}.piece:nth-child(3){animation-delay:.24s}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.piece{animation:none}}
+.frame{
+  width:340px;height:700px;border-radius:44px;padding:12px;
+  background:#0b0a08;border:1px solid #332c23;
+  box-shadow:0 40px 80px -30px rgba(0,0,0,.8), inset 0 0 0 1px rgba(255,255,255,.03);
+}
+.screen{width:100%;height:100%;border-radius:33px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.placard{max-width:340px}
+.placard .no{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.25em;color:var(--gold)}
+.placard h2{font-size:21px;font-weight:600;margin:6px 0 4px;letter-spacing:-.01em}
+.placard .desc{font-size:13.5px;line-height:1.65;color:var(--chalk-dim)}
+.placard .tags{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
+.placard .tags span{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--chalk-dim);border:1px solid var(--wall-line);border-radius:99px;padding:4px 10px}
+
+/* status bar shared */
+.sb{display:flex;justify-content:space-between;align-items:center;padding:14px 22px 6px;font-size:11px;font-weight:600;letter-spacing:.02em}
+/* ============================================================
+   DIRECTION A — AURUM NOIR  (warm black · gold · serif editorial)
+   ============================================================ */
+.a{background:#0e0c09;color:#ece5d8;font-family:'Tajawal','Space Grotesk',sans-serif}
+.a .sb{color:#8d8371}
+.a-head{padding:14px 20px 12px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;border-bottom:1px solid #221d15}
+.a-mark{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 32% 28%, #f0d879, #b8901f 70%);position:relative;flex:none}
+.a-mark::after{content:"";position:absolute;inset:7px;border-radius:50%;background:#0e0c09}
+.a-mark::before{content:"";position:absolute;inset:13px;border-radius:50%;background:linear-gradient(135deg,#f0d879,#8a6d15);z-index:1}
+.a-head h3{font-size:17px;font-weight:700}
+.a-head .sub{font-size:11px;color:#9a8f7b;margin-top:2px;display:flex;align-items:center;gap:5px}
+.dot{width:5px;height:5px;border-radius:50%;background:#7fc77f;box-shadow:0 0 6px #7fc77f}
+.a-topics{display:flex;gap:8px;padding:12px 20px 4px;overflow:hidden}
+.a-topics span{font-size:11.5px;padding:6px 13px;border-radius:99px;color:#b3a88f;border:1px solid #2a2419;white-space:nowrap}
+.a-topics .on{background:linear-gradient(135deg,#e8ca5f,#c19a26);color:#171307;border-color:transparent;font-weight:700}
+.a-chat{flex:1;padding:14px 18px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.b{max-width:82%;padding:11px 14px;font-size:13.5px;line-height:1.55;border-radius:16px}
+.a .agent{background:#1a1610;border:1px solid #2c2518;border-radius:16px 16px 16px 4px;align-self:flex-start}
+.a .agent .who{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:#d4af37;margin-bottom:5px}
+.a .user{background:linear-gradient(135deg,#e3c65c,#bd972a);color:#191408;border-radius:16px 16px 4px 16px;align-self:flex-end;font-weight:500}
+.toolrow{display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8d8371;padding:2px 4px}
+.toolrow i{width:8px;height:8px;border-radius:50%;border:1.5px solid #d4af37;border-top-color:transparent;animation:spin 1s linear infinite;flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.a-input{margin:6px 16px 14px;display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;background:#16120c;border:1px solid #2c2518;border-radius:24px;padding:7px 8px 7px 18px}
+.a-input .ph{font-size:13px;color:#776c58}
+.mic{width:38px;height:38px;border-radius:50%;border:1px solid #3a3020;display:grid;place-items:center;color:#d4af37;font-size:15px}
+.send{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#e8ca5f,#b8901f);display:grid;place-items:center;color:#171307;font-size:16px;font-weight:700}
+.a-byhamal{padding:0 0 14px;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:#6f654f;letter-spacing:.06em}
+
+/* ============================================================
+   DIRECTION B — RIADH DAYLIGHT (warm paper · clay · Arabic editorial)
+   ============================================================ */
+.bsc{background:#faf6ee;color:#221c12;font-family:'Tajawal',sans-serif}
+.bsc .sb{color:#8b8171}
+.b-head{padding:16px 20px 14px;border-bottom:2px solid #221c12}
+.b-head .ar{font-family:'Amiri',serif;font-size:23px;font-weight:700;line-height:1}
+.b-head .en{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#a1542f;margin-top:6px;font-weight:700}
+.b-head .conn{margin-top:10px;display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#6f6653;background:#f0e8d8;border-radius:99px;padding:4px 12px}
+.b-topics{display:flex;gap:8px;padding:14px 20px 2px}
+.b-topics span{font-size:12px;font-weight:700;padding:7px 14px;border-radius:8px;color:#6f6653;background:#efe7d6}
+.b-topics .on{background:#221c12;color:#faf6ee}
+.b-chat{flex:1;padding:16px 18px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.bsc .agent{background:#fff;border:1px solid #e5dcc8;border-radius:2px 14px 14px 14px;box-shadow:0 2px 0 #e5dcc8}
+.bsc .agent .who{font-size:10.5px;letter-spacing:.18em;color:#a1542f;font-weight:800;margin-bottom:6px}
+.bsc .user{background:#a1542f;color:#fdf9f1;border-radius:14px 2px 14px 14px;align-self:flex-end;font-weight:500}
+.b .file{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid #e5dcc8;border-radius:14px;padding:11px 13px;max-width:82%;align-self:flex-start}
+.b .file .fic{width:38px;height:38px;border-radius:8px;background:#f3ece0;display:grid;place-items:center;font-size:17px;flex:none}
+.b .file .fn{font-size:12.5px;font-weight:700}
+.b .file .fs{font-size:10.5px;color:#8b8171;margin-top:2px}
+.b .prog{height:3px;background:#eee3cf;border-radius:2px;margin-top:7px;overflow:hidden}
+.b .prog i{display:block;height:100%;width:68%;background:#a1542f;border-radius:2px}
+.b-input{margin:4px 16px 12px;display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;background:#fff;border:1.5px solid #221c12;border-radius:14px;padding:8px 8px 8px 16px}
+.b-input .ph{font-size:13.5px;color:#a2987f}
+.b-input .mic{border-color:#d8cdb6;color:#a1542f;border-radius:10px}
+.b-input .send{background:#221c12;color:#faf6ee;border-radius:10px}
+.b-byhamal{padding:0 0 13px;text-align:center;font-size:10.5px;color:#a2987f}
+.b-byhamal b{color:#a1542f}
+
+/* ============================================================
+   DIRECTION C — NIGHT COURIER (obsidian · neon-gold mono · ops deck)
+   ============================================================ */
+.c{background:#09090b;color:#e8e8ea;font-family:'Space Grotesk',sans-serif}
+.c .sb{color:#66666f;font-family:'IBM Plex Mono',monospace;font-size:10px}
+.c-head{padding:14px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #1b1b21}
+.c-led{width:34px;height:34px;border-radius:9px;background:#131318;border:1px solid #26262e;display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#ffd95e}
+.c-head h3{font-size:15px;font-weight:600;letter-spacing:.01em}
+.c-head .st{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#ffd95e;letter-spacing:.14em;margin-top:3px}
+.c-tabs{display:flex;gap:0;padding:10px 18px;border-bottom:1px solid #1b1b21}
+.c-tabs span{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:#66666f;padding:7px 12px;border:1px solid transparent}
+.c-tabs .on{color:#09090b;background:#ffd95e;font-weight:600;border-radius:6px}
+.c-chat{flex:1;padding:14px 16px;display:flex;flex-direction:column;gap:11px;overflow:hidden}
+.c .agent{background:#111116;border:1px solid #212129;border-radius:12px;padding:11px 13px}
+.c .agent .who{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.2em;color:#ffd95e;margin-bottom:6px}
+.c .agent p{font-size:13px;line-height:1.55;color:#c9c9d1}
+.c .agent code{font-family:'IBM Plex Mono',monospace;font-size:11px;background:#1a1a21;color:#ffd95e;padding:1px 6px;border-radius:4px}
+.c .user{background:#1d1d26;border:1px solid #2c2c36;border-left:2px solid #ffd95e;border-radius:10px;align-self:flex-end;max-width:80%;padding:9px 12px;font-size:13px}
+.c .approve{display:flex;gap:8px;margin-top:9px}
+.c .approve button{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;padding:7px 13px;border-radius:6px;border:1px solid #2c2c36;background:#131318;color:#c9c9d1}
+.c .approve .yes{background:#ffd95e;color:#09090b;border-color:#ffd95e;font-weight:600}
+.c-input{margin:6px 14px 12px;display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;background:#111116;border:1px solid #26262e;border-radius:12px;padding:8px 8px 8px 14px}
+.c-input .ph{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#55555f}
+.c .mic{border-color:#2c2c36;border-radius:9px;color:#ffd95e}
+.c .send{background:#ffd95e;color:#09090b;border-radius:9px;font-family:'IBM Plex Mono',monospace;font-size:13px}
+.c-byhamal{padding:0 0 13px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.2em;color:#4c4c55}
+
+.wall-foot{max-width:1440px;margin:56px auto 0;padding-top:24px;border-top:1px solid var(--wall-line);display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--chalk-dim);letter-spacing:.08em;flex-wrap:wrap;gap:8px}
+</style>
+</head>
+<body>
+
+<header class="wall-head">
+  <div>
+    <div class="eyebrow">Hermes Access · Design Identity · v1</div>
+    <h1>Three directions. <em>One decision.</em></h1>
+  </div>
+  <div class="meta">HAMAL KSA<br>Phase 1 — Owner approval gate<br>2026-08-07</div>
+</header>
+
+<div class="gallery">
+
+  <!-- ═══════════ A · AURUM NOIR ═══════════ -->
+  <div class="piece">
+    <div class="frame"><div class="screen a">
+      <div class="sb"><span>16:42</span><span>5G ▮▮▮</span></div>
+      <div class="a-head">
+        <div class="a-mark"></div>
+        <div>
+          <h3>لولو</h3>
+          <div class="sub"><span class="dot"></span> Tailscale · your-agent</div>
+        </div>
+        <div style="color:#6f654f;font-size:18px">⋯</div>
+      </div>
+      <div class="a-topics">
+        <span class="on">التداول 💵</span><span>البيت</span><span>المشاريع</span>
+      </div>
+      <div class="a-chat">
+        <div class="b agent">
+          <div class="who">Lolo</div>
+          فحصت السوق — BTC ثابت فوق المقاومة. فتحت تقرير كامل في المرفقات.
+        </div>
+        <div class="toolrow"><i></i> running: freqtrade · analyze cycle 4/6</div>
+        <div class="b user">ممتاز. جهّز لي الملخص صوتي وأنا في الطريق</div>
+        <div class="b agent">
+          <div class="who">Lolo</div>
+          جهّزته 🎧 أرسلته كرسالة صوتية — 90 ثانية، بس النقاط الحرجة.
+        </div>
+      </div>
+      <div class="a-input">
+        <div class="ph">اسأل لولو…</div>
+        <div class="mic">🎙</div>
+        <div class="send">↑</div>
+      </div>
+      <div class="a-byhamal">Hermes Access · by HAMAL KSA</div>
+    </div></div>
+    <div class="placard">
+      <div class="no">DIRECTION 01</div>
+      <h2>Aurum Noir — الذهبي الأسود</h2>
+      <div class="desc">Warm obsidian, molten gold, serif whispers. Continuity with the Hermes brand gold — but darker, richer, more intimate. Feels like a private banker's app that happens to be an agent.</div>
+      <div class="tags"><span>VARIANCE · High</span><span>Dark-first</span><span>Serif accents</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ B · RIADH DAYLIGHT ═══════════ -->
+  <div class="piece">
+    <div class="frame"><div class="screen bsc">
+      <div class="sb"><span>16:42</span><span>5G ▮▮▮</span></div>
+      <div class="b-head">
+        <div class="ar">هرمس أكسس</div>
+        <div class="en">Hermes Access</div>
+        <div class="conn"><span class="dot"></span> متصل · your-agent</div>
+      </div>
+      <div class="b-topics">
+        <span class="on">التداول</span><span>البيت</span><span>المشاريع</span>
+      </div>
+      <div class="b-chat">
+        <div class="b agent">
+          <div class="who">لولو</div>
+          خلصت تقرير المصاريف لشهر أغسطس — ١٤ عملية مراجعة، في ٣ تحتاج نظرك.
+        </div>
+        <div class="file">
+          <div class="fic">📊</div>
+          <div>
+            <div class="fn">HAMAL_expenses_aug.pdf</div>
+            <div class="fs">2.4 MB · تنزيل 68%</div>
+            <div class="prog"><i></i></div>
+          </div>
+        </div>
+        <div class="b user">نزّلي الملفات الكبيرة كمان، كلها</div>
+      </div>
+      <div class="b-input">
+        <div class="ph">اكتب رسالة…</div>
+        <div class="mic">🎙</div>
+        <div class="send">↑</div>
+      </div>
+      <div class="b-byhamal">صُنع بواسطة <b>HAMAL KSA</b></div>
+    </div></div>
+    <div class="placard">
+      <div class="no">DIRECTION 02</div>
+      <h2>Riyadh Daylight — نهار الرياض</h2>
+      <div class="desc">Warm paper, ink rules, burnt-clay accent, Amiri serif for Arabic display. Editorial, calm, premium-light. The anti-dark-mode statement — reads like a printed HAMAL letterhead come alive.</div>
+      <div class="tags"><span>VARIANCE · Medium</span><span>Light-first</span><span>Arabic editorial</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ C · NIGHT COURIER ═══════════ -->
+  <div class="piece">
+    <div class="frame"><div class="screen c">
+      <div class="sb"><span>16:42</span><span>TS ▮▮▮ 8642</span></div>
+      <div class="c-head">
+        <div class="c-led">⌁</div>
+        <div>
+          <h3>Hermes Access</h3>
+          <div class="st">● LIVE · RUN #4821</div>
+        </div>
+      </div>
+      <div class="c-tabs">
+        <span class="on">CHAT</span><span>TOPICS</span><span>CRON</span><span>FILES</span>
+      </div>
+      <div class="c-chat">
+        <div class="b agent">
+          <div class="who">AGENT · LOLO</div>
+          <p>Deploy pipeline finished. One command needs your approval: <code>systemctl restart gta-core</code></p>
+          <div class="approve"><button class="yes">APPROVE</button><button>DENY</button></div>
+        </div>
+        <div class="b user">اعتمد، وراقب اللوجات ١٠ دقايق</div>
+        <div class="b agent">
+          <div class="who">AGENT · LOLO</div>
+          <p>تم ✅ المراقبة شغالة — حوصلك إشعار لو في أي anomaly.</p>
+        </div>
+      </div>
+      <div class="c-input">
+        <div class="ph">&gt; message lolo_</div>
+        <div class="mic">🎙</div>
+        <div class="send">↵</div>
+      </div>
+      <div class="c-byhamal">HAMAL KSA · SECURE CHANNEL</div>
+    </div></div>
+    <div class="placard">
+      <div class="no">DIRECTION 03</div>
+      <h2>Night Courier — ساعي الليل</h2>
+      <div class="desc">Obsidian ops-deck, mono type, neon-gold signals. For the user who lives in terminals — every screen says "your agent is working, here's the proof." Approvals get command-center treatment.</div>
+      <div class="tags"><span>VARIANCE · High</span><span>Mono-first</span><span>Ops aesthetic</span></div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="wall-foot">
+  <span>PICK A DIRECTION — OR MIX (e.g. A's palette + B's Arabic type)</span>
+  <span>docs/design/identity-directions.html</span>
+</footer>
+
+</body>
+</html>

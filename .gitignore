@@ -1,0 +1,21 @@
+# Secrets — NEVER commit
+.secrets/
+*.keystore
+*.jks
+signing.properties
+
+# Build artifacts
+dist/
+app/android/app/build/
+app/android/build/
+app/android/.gradle/
+app/node_modules/
+app/.expo/
+*.apk
+*.aab
+
+# Keep the committed APK? No — releases go via GitHub Releases, not git.
+
+# Misc
+.DS_Store
+*.log

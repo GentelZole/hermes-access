@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!--
+      Hermes Access connects ONLY to the user's own self-hosted agent, which
+      runs on plain HTTP inside a private Tailscale network (100.64.0.0/10) —
+      WireGuard-encrypted and ACL-gated by Tailscale itself, so cleartext at
+      the Android layer does not mean cleartext on the wire.
+
+      Android's domain-config matches literal hosts/names only (no CIDR), and
+      every user's agent lives at an arbitrary tailnet address — so cleartext
+      cannot be host-scoped in this file. The guard lives in the client
+      instead: gateway/store.ts isSafeBaseUrl() REFUSES to send the bearer
+      key to any non-https host outside the Tailscale CGNAT/loopback ranges,
+      enforced on pairing, manual connect, and every restart.
+    -->
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>
