@@ -1,0 +1,67 @@
+name: CI
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── Type gate ───────────────────────────────────────────────────────────────
+  # The whole app is TypeScript with "strict": true, so `tsc --noEmit` is the
+  # meaningful, fast correctness gate. The Android build is intentionally NOT run
+  # in CI: a full Gradle + NDK assemble takes tens of minutes per run, needs the
+  # Android SDK and a JDK on the runner, and produces nothing reviewable.
+  # Native changes are boot-tested by the contributor on an emulator instead —
+  # see docs/CONTRIBUTING.md.
+  typecheck:
+    name: TypeScript (app)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+  # ── Secret scan ─────────────────────────────────────────────────────────────
+  # Catches the classic mistakes: a provider key pasted into source, a GitHub
+  # token in a script, or a live bearer token committed inside an example.
+  # .env.example is excluded because it carries placeholder shapes on purpose.
+  secret-scan:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Scan tracked files for secrets
+        run: |
+          set -euo pipefail
+          PATTERN='(sk-[A-Za-z0-9]{20,}|sk-proj-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{30,}|Bearer [A-Za-z0-9._-]{30,})'
+          # git grep walks tracked files itself — no xargs, so paths containing
+          # spaces are safe. -I skips binaries, -n gives actionable line numbers,
+          # and .env.example is excluded because it holds placeholder shapes.
+          hits="$(git grep -InE --color=never -e "$PATTERN" -- . ':(exclude).env.example' || true)"
+          if [ -n "$hits" ]; then
+            echo "$hits"
+            echo "::error::Possible secret committed to a tracked file. Remove it, rotate it, and force-push the cleaned history."
+            exit 1
+          fi
+          echo "No secrets detected in tracked files."

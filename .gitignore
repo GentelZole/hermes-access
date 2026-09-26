@@ -4,6 +4,20 @@
 *.jks
 signing.properties
 
+# Local environment (keep the template, ignore the real thing)
+.env
+.env.*
+!.env.example
+
+# app/android/ IS committed (bare-workflow native project: signing, icons,
+# network-security xml). Only build outputs below are ignored.
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
 # Build artifacts
 dist/
 app/android/app/build/
@@ -19,3 +33,5 @@ app/.expo/
 # Misc
 .DS_Store
 *.log
+app/android/**/.cxx/
+app/android/app/debug.keystore
